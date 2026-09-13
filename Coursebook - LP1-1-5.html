@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Listening Practice — Multiple Choice Tests</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+    header {
+      background: linear-gradient(135deg, #111827, #2563eb);
+      color: #fff;
+      text-align: center;
+      padding: 32px 16px;
+    }
+    header h1 { margin: 0 0 8px; font-size: 30px; }
+    header p { margin: 5px 0; opacity: 0.9; }
+    
+    .wrap {
+      max-width: 1050px;
+      margin: auto;
+      padding: 18px;
+    }
+    
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .primary { background: #2563eb; color: #fff; }
+    .primary:hover { background: #1d4ed8; }
+    .secondary { background: #e8eefc; color: #1743a2; }
+    .secondary:hover { background: #d0e0fc; }
+    .gray { background: #eef2f7; color: #334155; }
+    .gray:hover { background: #e2e8f0; }
+    
+    #result {
+      margin-left: auto;
+      font-weight: 800;
+      font-size: 18px;
+    }
+    
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 18px 0;
+      box-shadow: 0 5px 18px rgba(16, 24, 40, .06);
+    }
+    .card h2 { margin-top: 0; color: #1e293b; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+    
+    .instruction {
+      color: #667085;
+      font-size: 14px;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+    }
+    
+    .q-block {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    
+    .q-title {
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .opt-label {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+    
+    .opt-label:hover {
+      border-color: #2563eb;
+      background: #f0f7ff;
+    }
+    
+    .opt-label input {
+      margin-right: 10px;
+      accent-color: #2563eb;
+      width: 16px;
+      height: 16px;
+    }
+    
+    .opt-label.correct-bg {
+      background: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #166534 !important;
+      font-weight: bold;
+    }
+    
+    .opt-label.wrong-bg {
+      background: #fee2e2 !important;
+      border-color: #dc2626 !important;
+      color: #991b1b !important;
+    }
+    
+    .mark {
+      font-weight: 800;
+      margin-left: auto;
+    }
+    .mark.good { color: #16a34a; }
+    .mark.bad { color: #dc2626; }
+    
+    footer {
+      text-align: center;
+      color: #667085;
+      padding: 28px 16px;
+      font-weight: 600;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 30px;
+    }
+    
+    @media(max-width:650px){
+      header h1 { font-size: 24px; }
+      .card { padding: 18px; }
+      .questions-grid { grid-template-columns: 1fr; }
+      #result { width: 100%; margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Listening Practice Test Collection</h1>
+  <p>5 ta Test • 40 ta Savol • Interactive Listening Practice</p>
+</header>
+
+<main class="wrap">
+  <div class="toolbar">
+    <button class="primary" type="button" onclick="checkAnswers()">Tekshirish</button>
+    <button class="secondary" type="button" onclick="showAnswers()">Javoblarni ko‘rsatish</button>
+    <button class="gray" type="button" onclick="clearAll()">Tozalash</button>
+    <div id="result">Natija: 0/40</div>
+  </div>
+
+  <!-- PRACTICE 1 -->
+  <section class="card" id="p1">
+    <h2>PRACTICE 1</h2>
+    <div class="instruction">You will hear some sentences. You will hear each sentence twice. Choose the correct reply to each sentence (A, B, or C).</div>
+    <div class="questions-grid" id="grid-p1"></div>
+  </section>
+
+  <!-- PRACTICE 2 -->
+  <section class="card" id="p2">
+    <h2>PRACTICE 2</h2>
+    <div class="instruction">You will hear some sentences. You will hear each sentence twice. Choose the correct reply to each sentence (A, B, or C).</div>
+    <div class="questions-grid" id="grid-p2"></div>
+  </section>
+
+  <!-- PRACTICE 3 -->
+  <section class="card" id="p3">
+    <h2>PRACTICE 3</h2>
+    <div class="instruction">You will hear some sentences. You will hear each sentence twice. Choose the correct reply to each sentence (A, B, or C).</div>
+    <div class="questions-grid" id="grid-p3"></div>
+  </section>
+
+  <!-- PRACTICE 4 -->
+  <section class="card" id="p4">
+    <h2>PRACTICE 4</h2>
+    <div class="instruction">You will hear some sentences. You will hear each sentence twice. Choose the correct reply to each sentence (A, B, or C).</div>
+    <div class="questions-grid" id="grid-p4"></div>
+  </section>
+
+  <!-- PRACTICE 5 -->
+  <section class="card" id="p5">
+    <h2>PRACTICE 5</h2>
+    <div class="instruction">You will hear some sentences. You will hear each sentence twice. Choose the correct reply to each sentence (A, B, or C).</div>
+    <div class="questions-grid" id="grid-p5"></div>
+  </section>
+</main>
+
+<footer>
+  Made by Eldorbek Anarbayev
+</footer>
+
+<script>
+const testData = [
+  {
+    id: 1,
+    questions: [
+      { q: 1, options: ["Me too.", "Can you?", "Sure, you can."] },
+      { q: 2, options: ["Take bus 6.", "It starts at 9 a.m. tomorrow.", "It’s in the center."] },
+      { q: 3, options: ["OK, here it is.", "No, that doesn’t suit you.", "Sure, I’ll wait here."] },
+      { q: 4, options: ["In the school library.", "Since 1997.", "Before I was born."] },
+      { q: 5, options: ["You should take a short break.", "Let’s get to work right now!", "Don’t worry, they haven’t."] },
+      { q: 6, options: ["How about an ice-cream?", "You need to wear your sweater.", "Let’s eat some fresh pizza and chips."] },
+      { q: 7, options: ["When does it happen?", "Where did you see that?", "Who told you that?"] },
+      { q: 8, options: ["My hands are also firm.", "Sounds like a boring person.", "Can you expect anything?"] }
+    ]
+  },
+  {
+    id: 2,
+    questions: [
+      { q: 1, options: ["So good to see you again.", "Yes, she is very old.", "No, you aren’t her."] },
+      { q: 2, options: ["I’m lovely, thank you.", "I met someone yesterday.", "Lovely to meet you too!"] },
+      { q: 3, options: ["My home is very big.", "I’m from Valencia.", "There are many parks."] },
+      { q: 4, options: ["Yeah, that’s him.", "No, they are.", "Yes, that did."] },
+      { q: 5, options: ["You can also join our club.", "No, it is nice of them to leave.", "Yes, I’m happy to be here."] },
+      { q: 6, options: ["Never mind.", "You’re right.", "Yeah, we can."] },
+      { q: 7, options: ["Yeah!", "Sure!", "Nice!"] },
+      { q: 8, options: ["I am very tall these days.", "I am twenty-five years old.", "I’ve been great, thanks!"] }
+    ]
+  },
+  {
+    id: 3,
+    questions: [
+      { q: 1, options: ["Yes, I always play football.", "I’m waiting for the menu.", "No, I’m not hungry today."] },
+      { q: 2, options: ["Only on weekends.", "I’m going to the park.", "Football."] },
+      { q: 3, options: ["I’m not very hungry.", "It’s nice.", "I bought it last week."] },
+      { q: 4, options: ["I went shopping yesterday.", "That’s my favorite song.", "Take a little rest."] },
+      { q: 5, options: ["Maybe tomorrow.", "I only make pasta.", "I’m watching a movie now."] },
+      { q: 6, options: ["I watched a video.", "I am hungry.", "It’s very cold today."] },
+      { q: 7, options: ["Maybe next week’s weather is good.", "I am working late today, sorry.", "Yes, I like pizza."] },
+      { q: 8, options: ["No, mine is black.", "I live near the station.", "It costs about ten dollars."] }
+    ]
+  },
+  {
+    id: 4,
+    questions: [
+      { q: 1, options: ["I usually walk to school.", "What a pity.", "It starts at 7 p.m."] },
+      { q: 2, options: ["I think it’s very expensive.", "Sure, no problem.", "I don’t like coffee."] },
+      { q: 3, options: ["I take the bus every morning.", "Yes, I know her well.", "Sorry, I don’t work here."] },
+      { q: 4, options: ["Quite long years.", "I don’t like that color.", "I met her at the station."] },
+      { q: 5, options: ["It’s very cold outside.", "I’m looking for the supermarket.", "Yes, you can sit there."] },
+      { q: 6, options: ["I can’t find my phone.", "I’d like an orange juice, please.", "I’m going to the cinema."] },
+      { q: 7, options: ["Around half past nine.", "No, it’s not my bag.", "I usually go by bus."] },
+      { q: 8, options: ["I don’t drink cola.", "It is on Tuesday.", "It’s near the bus stop."] }
+    ]
+  },
+  {
+    id: 5,
+    questions: [
+      { q: 1, options: ["I bought it yesterday.", "I’m looking for my phone.", "It’s outside."] },
+      { q: 2, options: ["No, I don’t like coffee.", "I’ll be in Italy.", "I start work at nine."] },
+      { q: 3, options: ["It’s on the table.", "I left them in the shop.", "Maybe next weekend."] },
+      { q: 4, options: ["It’s next to the sofa.", "It’s 07 849 700 567.", "It’s S25 Pro Max."] },
+      { q: 5, options: ["Only on my birthday.", "I work in the city centre.", "Yes, I really enjoy them."] },
+      { q: 6, options: ["I usually take the bus.", "It’s history.", "I’m not hungry right now."] },
+      { q: 7, options: ["Yes, you can pay by credit card.", "No, I don’t pay with cash.", "It’s very expensive."] },
+      { q: 8, options: ["No, I didn’t see that movie.", "It was great.", "I’m meeting my friend later."] }
+    ]
+  }
+];
+
+// Aniq rasmlardan olingan kalitlar (0 = A, 1 = B, 2 = C)
+const correctKeys = {
+  // Practice 1: 1.C, 2.A, 3.C, 4.B, 5.A, 6.A, 7.C, 8.B
+  "1-1": 2, "1-2": 0, "1-3": 2, "1-4": 1, "1-5": 0, "1-6": 0, "1-7": 2, "1-8": 1,
+  
+  // Practice 2: 1.C, 2.B, 3.C, 4.A, 5.A, 6.B, 7.C, 8.A
+  "2-1": 2, "2-2": 1, "2-3": 2, "2-4": 0, "2-5": 0, "2-6": 1, "2-7": 2, "2-8": 0,
+  
+  // Practice 3: 1.B, 2.C, 3.B, 4.C, 5.B, 6.A, 7.B, 8.A
+  "3-1": 1, "3-2": 2, "3-3": 1, "3-4": 2, "3-5": 1, "3-6": 0, "3-7": 1, "3-8": 0,
+  
+  // Practice 4: 1.B, 2.B, 3.C, 4.A, 5.C, 6.B, 7.C, 8.B
+  "4-1": 1, "4-2": 1, "4-3": 2, "4-4": 0, "4-5": 2, "4-6": 1, "4-7": 2, "4-8": 1,
+  
+  // Practice 5: 1.C, 2.B, 3.A, 4.B, 5.C, 6.B, 7.A, 8.B
+  "5-1": 2, "5-2": 1, "5-3": 0, "5-4": 1, "5-5": 2, "5-6": 1, "5-7": 0, "5-8": 1
+};
+
+function renderTests() {
+  testData.forEach(test => {
+    const grid = document.getElementById(`grid-p${test.id}`);
+    let html = '';
+    test.questions.forEach(item => {
+      const qKey = `${test.id}-${item.q}`;
+      html += `
+        <div class="q-block">
+          <div class="q-title">
+            <span>${item.q}.</span>
+            <span class="mark" id="mark-${qKey}"></span>
+          </div>
+          <div class="options">
+            ${item.options.map((opt, idx) => {
+              const letter = String.fromCharCode(65 + idx);
+              return `
+                <label class="opt-label" id="lbl-${qKey}-${idx}">
+                  <input type="radio" name="q-${qKey}" value="${idx}">
+                  <span><b>${letter})</b> ${opt}</span>
+                </label>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    });
+    grid.innerHTML = html;
+  });
+}
+
+function checkAnswers() {
+  let score = 0;
+  const total = 40;
+
+  testData.forEach(test => {
+    test.questions.forEach(item => {
+      const qKey = `${test.id}-${item.q}`;
+      const correctIdx = correctKeys[qKey];
+      const selected = document.querySelector(`input[name="q-${qKey}"]:checked`);
+      const markEl = document.getElementById(`mark-${qKey}`);
+
+      for (let i = 0; i < 3; i++) {
+        const lbl = document.getElementById(`lbl-${qKey}-${i}`);
+        if(lbl) lbl.classList.remove('correct-bg', 'wrong-bg');
+      }
+
+      if (selected) {
+        const userVal = parseInt(selected.value, 10);
+        if (userVal === correctIdx) {
+          score++;
+          document.getElementById(`lbl-${qKey}-${userVal}`).classList.add('correct-bg');
+          markEl.textContent = '✓';
+          markEl.className = 'mark good';
+        } else {
+          document.getElementById(`lbl-${qKey}-${userVal}`).classList.add('wrong-bg');
+          document.getElementById(`lbl-${qKey}-${correctIdx}`).classList.add('correct-bg');
+          markEl.textContent = '✗';
+          markEl.className = 'mark bad';
+        }
+      } else {
+        document.getElementById(`lbl-${qKey}-${correctIdx}`).classList.add('correct-bg');
+        markEl.textContent = '✗';
+        markEl.className = 'mark bad';
+      }
+    });
+  });
+
+  const percentage = Math.round((score / total) * 100);
+  document.getElementById('result').textContent = `Natija: ${score}/${total} — ${percentage}%`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showAnswers() {
+  testData.forEach(test => {
+    test.questions.forEach(item => {
+      const qKey = `${test.id}-${item.q}`;
+      const correctIdx = correctKeys[qKey];
+      
+      const radio = document.querySelector(`input[name="q-${qKey}"][value="${correctIdx}"]`);
+      if (radio) radio.checked = true;
+
+      for (let i = 0; i < 3; i++) {
+        const lbl = document.getElementById(`lbl-${qKey}-${i}`);
+        if (lbl) {
+          lbl.classList.remove('wrong-bg');
+          if (i === correctIdx) {
+            lbl.classList.add('correct-bg');
+          } else {
+            lbl.classList.remove('correct-bg');
+          }
+        }
+      }
+
+      const markEl = document.getElementById(`mark-${qKey}`);
+      markEl.textContent = '✓';
+      markEl.className = 'mark good';
+    });
+  });
+
+  document.getElementById('result').textContent = 'Natija: 40/40 — 100%';
+}
+
+function clearAll() {
+  document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+  document.querySelectorAll('.opt-label').forEach(lbl => lbl.classList.remove('correct-bg', 'wrong-bg'));
+  document.querySelectorAll('.mark').forEach(m => {
+    m.textContent = '';
+    m.className = 'mark';
+  });
+  document.getElementById('result').textContent = 'Natija: 0/40';
+}
+
+renderTests();
+</script>
+
+</body>
+</html>
